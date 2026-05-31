@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share Your Experience</title>
+
+  <!-- ============================================================
+    REPUTATION GROWTH SYSTEMS — Client Review Landing Page
+    ============================================================
+    TO CUSTOMISE PER CLIENT, change only these 3 variables:
+      1. BUSINESS_NAME   — shown in heading and footer
+      2. BUSINESS_LOGO   — URL to logo image, or "" for initials
+      3. GOOGLE_REVIEW_URL — the client's Google review short link
+         (Get from: business.google.com → Ask for reviews → copy link)
+
+    TO SET YOUR EMAIL:
+      4. FEEDBACK_EMAIL  — your email address for private feedback
+  ============================================================ -->
+
+  <style>
+    :root { --business-color: #1a6b4a; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap');
+    body {
+      min-height: 100%; font-family: 'DM Sans', sans-serif;
+      background: #f7f5f0; display: flex;
+      align-items: center; justify-content: center; padding: 24px 16px;
+    }
+    .card {
+      background: #fff; border-radius: 24px; padding: 40px 32px 36px;
+      max-width: 400px; width: 100%; text-align: center; position: relative; overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--business-color), #2dd4a0);
+    }
+    .logo-wrap {
+      width: 72px; height: 72px; border-radius: 16px; background: #f0f9f5;
+      border: 1px solid #d4ede4; margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+    .logo-placeholder { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--business-color); }
+    .heading { font-family: 'DM Serif Display', serif; font-size: 26px; color: #1a1a1a; line-height: 1.25; margin-bottom: 8px; }
+    .subheading { font-size: 15px; color: #777; font-weight: 300; margin-bottom: 32px; line-height: 1.5; }
+    .stars { display: flex; justify-content: center; gap: 6px; margin-bottom: 32px; }
+    .star { font-size: 30px; color: #e8e0d4; cursor: pointer; transition: color 0.15s ease, transform 0.1s ease; line-height: 1; user-select: none; }
+    .star.lit { color: #f5a623; }
+    .star:hover { transform: scale(1.15); }
+    .btn {
+      display: block; width: 100%; padding: 15px 20px; border-radius: 14px;
+      border: none; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+      cursor: pointer; transition: all 0.18s ease; text-decoration: none; margin-bottom: 10px;
+    }
+    .btn-primary { background: var(--business-color); color: #fff; }
+    .btn-primary:hover { background: #155c3e; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,107,74,0.25); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary { background: #f7f5f0; color: #666; font-size: 14px; font-weight: 400; border: 1px solid #e8e4dc; }
+    .btn-secondary:hover { background: #f0ede7; color: #444; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .form-group { text-align: left; margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 500; color: #555; margin-bottom: 6px; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid #e4e0d8;
+      background: #faf9f7; font-family: 'DM Sans', sans-serif; font-size: 14px; color: #1a1a1a;
+      outline: none; transition: border-color 0.15s; resize: none;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--business-color); background: #fff; }
+    .form-group textarea { height: 100px; }
+    .result-icon { font-size: 48px; margin-bottom: 16px; display: block; }
+    .result-heading { font-family: 'DM Serif Display', serif; font-size: 22px; color: #1a1a1a; margin-bottom: 8px; }
+    .result-body { font-size: 14px; color: #888; font-weight: 300; line-height: 1.6; margin-bottom: 24px; }
+    .back-link { display: inline-block; font-size: 13px; color: #aaa; cursor: pointer; margin-top: 16px; text-decoration: none; transition: color 0.15s; }
+    .back-link:hover { color: #666; }
+    .footer { margin-top: 24px; font-size: 12px; color: #ccc; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .card { animation: fadeUp 0.4s ease both; }
+    .screen.active { animation: fadeUp 0.3s ease both; }
+    @media (max-width: 400px) { .card { padding: 32px 22px 28px; border-radius: 20px; } .heading { font-size: 23px; } }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- SCREEN 1: Rating -->
+  <div class="screen active" id="screen-main">
+    <div class="logo-wrap" id="logo-wrap"></div>
+    <h1 class="heading" id="main-heading">How was your experience?</h1>
+    <p class="subheading">We'd love to hear from you</p>
+    <div class="stars" id="stars" role="group" aria-label="Rate your experience">
+      <span class="star" data-val="1" role="button" tabindex="0" aria-label="1 star">★</span>
+      <span class="star" data-val="2" role="button" tabindex="0" aria-label="2 stars">★</span>
+      <span class="star" data-val="3" role="button" tabindex="0" aria-label="3 stars">★</span>
+      <span class="star" data-val="4" role="button" tabindex="0" aria-label="4 stars">★</span>
+      <span class="star" data-val="5" role="button" tabindex="0" aria-label="5 stars">★</span>
+    </div>
+    <div id="cta-area" style="display:none;">
+      <a class="btn btn-primary" id="google-btn" href="#" target="_blank" rel="noopener">⭐ Leave us a Google Review</a>
+      <button class="btn btn-secondary" id="feedback-btn" onclick="showFeedback()" style="display:none;">Share private feedback instead</button>
+    </div>
+    <p style="font-size:12px;color:#ccc;margin-top:20px;">Takes less than 60 seconds</p>
+  </div>
+
+  <!-- SCREEN 2: Feedback form — plain POST, no AJAX, no CORS issues -->
+  <div class="screen" id="screen-feedback">
+    <span class="result-icon">💬</span>
+    <h2 class="result-heading">We're sorry to hear that</h2>
+    <p class="result-body">Your feedback helps us improve. Tell us what happened and we'll do our best to make it right.</p>
+
+    <form id="feedback-form" method="POST" action="">
+      <!-- Formsubmit config -->
+      <input type="hidden" name="_captcha"  value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_subject"  id="form-subject" value="Private feedback">
+      <input type="hidden" name="_next"     id="form-next"    value="">
+      <input type="hidden" name="Business"  id="form-business" value="">
+      <input type="hidden" name="Rating"    id="form-rating"   value="">
+      <!-- Honeypot -->
+      <input type="text"   name="_honey"    style="display:none" tabindex="-1" autocomplete="off">
+
+      <div class="form-group">
+        <label for="fname">Your name (optional)</label>
+        <input type="text" id="fname" name="Name" placeholder="Jane Smith" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="fmessage">What could we have done better? *</label>
+        <textarea id="fmessage" name="Message" placeholder="Tell us what happened…" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Send feedback</button>
+    </form>
+    <a class="back-link" onclick="showMain()">← Back</a>
+  </div>
+
+  <!-- SCREEN 3: Thank you -->
+  <div class="screen" id="screen-thanks-feedback">
+    <span class="result-icon">🙏</span>
+    <h2 class="result-heading">Thank you for letting us know</h2>
+    <p class="result-body">We've received your feedback and will follow up with you shortly. We appreciate your honesty — it helps us serve you better.</p>
+    <a class="back-link" onclick="showMain()">← Start over</a>
+  </div>
+
+  <div class="footer" id="footer-text"></div>
+</div>
+
+<script>
+  // ═══════════════════════════════════════════════
+  //  ★  CHANGE THESE 4 VALUES PER CLIENT  ★
+  // ═══════════════════════════════════════════════
+
+  const BUSINESS_NAME     = "Riverside Dental";
+  const BUSINESS_LOGO     = "";           // URL to logo, or "" for initials
+  const GOOGLE_REVIEW_URL = "https://g.page/r/REPLACE_WITH_CLIENT_REVIEW_LINK/review";
+  const FEEDBACK_EMAIL    = "you@youremail.com"; // Your email — receives private feedback
+
+  // ═══════════════════════════════════════════════
+  //  SETUP
+  // ═══════════════════════════════════════════════
+
+  (function setup() {
+    document.title = BUSINESS_NAME + " — Share Your Experience";
+    document.getElementById('main-heading').textContent = "How was your visit at " + BUSINESS_NAME + "?";
+    document.getElementById('footer-text').textContent  = "© " + BUSINESS_NAME;
+
+    // Logo or initials
+    const logoWrap = document.getElementById('logo-wrap');
+    if (BUSINESS_LOGO) {
+      logoWrap.innerHTML = '<img src="' + BUSINESS_LOGO + '" alt="' + BUSINESS_NAME + ' logo">';
+    } else {
+      const initials = BUSINESS_NAME.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+      logoWrap.innerHTML = '<span class="logo-placeholder">' + initials + '</span>';
+    }
+
+    // Set Google review button
+    document.getElementById('google-btn').href = GOOGLE_REVIEW_URL;
+
+    // Set form action to Formsubmit plain POST endpoint
+    const form = document.getElementById('feedback-form');
+    form.action = 'https://formsubmit.co/' + FEEDBACK_EMAIL;
+
+    // Set return URL so Formsubmit redirects back to this page after submit
+    document.getElementById('form-next').value = window.location.href;
+
+    // Pre-fill hidden fields
+    document.getElementById('form-business').value = BUSINESS_NAME;
+  })();
+
+  // ═══════════════════════════════════════════════
+  //  STARS
+  // ═══════════════════════════════════════════════
+
+  let selectedRating = 0;
+  const stars = document.querySelectorAll('.star');
+
+  stars.forEach(star => {
+    star.addEventListener('click', () => handleStar(parseInt(star.dataset.val)));
+    star.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') handleStar(parseInt(star.dataset.val));
+    });
+  });
+
+  function handleStar(val) {
+    selectedRating = val;
+    stars.forEach(s => s.classList.toggle('lit', parseInt(s.dataset.val) <= val));
+
+    const ctaArea   = document.getElementById('cta-area');
+    const googleBtn = document.getElementById('google-btn');
+    const fbBtn     = document.getElementById('feedback-btn');
+    ctaArea.style.display = 'block';
+
+    if (val >= 4) {
+      googleBtn.style.display = 'block';
+      fbBtn.style.display     = 'none';
+      googleBtn.textContent   = val === 5 ? "⭐ Leave us a Google Review" : "Leave us a Google Review";
+    } else {
+      googleBtn.style.display = 'none';
+      fbBtn.style.display     = 'block';
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  //  NAVIGATION
+  // ═══════════════════════════════════════════════
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function showMain()     { showScreen('screen-main'); }
+  function showFeedback() { showScreen('screen-feedback'); }
+
+  // ═══════════════════════════════════════════════
+  //  FORM — update hidden fields before submit
+  // ═══════════════════════════════════════════════
+
+  document.getElementById('feedback-form').addEventListener('submit', function() {
+    document.getElementById('form-subject').value = 'Private feedback — ' + BUSINESS_NAME + ' (Rating: ' + selectedRating + '/5)';
+    document.getElementById('form-rating').value  = selectedRating + ' / 5';
+  });
+</script>
+</body>
+</html>
